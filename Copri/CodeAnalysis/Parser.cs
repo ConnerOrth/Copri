@@ -66,7 +66,19 @@ namespace Copri.CodeAnalysis
         
         private ExpressionSyntax ParseExpression(int parentPrecedence = 0)
         {
-            ExpressionSyntax left = ParsePrimaryExpression();
+            ExpressionSyntax left ;
+            int unaryOperatorPrecedence = Current.Kind.GetUnaryOperatorPrecedence();
+
+            if (unaryOperatorPrecedence != 0 && unaryOperatorPrecedence >= parentPrecedence)
+            {
+                SyntaxToken operatorToken = NextToken();
+                ExpressionSyntax operand = ParseExpression(unaryOperatorPrecedence);
+                left = new UnaryExpressionSyntax(operatorToken, operand);
+            }
+            else
+            {
+                left = ParsePrimaryExpression();
+            }
 
             while (true)
             {

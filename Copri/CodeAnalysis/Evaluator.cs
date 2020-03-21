@@ -22,6 +22,15 @@ namespace Copri.CodeAnalysis
             {
                 return (int)l.LiteralToken.Value;
             }
+
+            if (node is UnaryExpressionSyntax u)
+            {
+                int operand = EvaluateExpression(u.Operand);
+                if (u.OperatorToken.Kind == SyntaxKind.PlusToken) return operand;
+                else if (u.OperatorToken.Kind == SyntaxKind.MinusToken) return -operand;
+                throw new Exception($"Unexpected unary operator {u.OperatorToken.Kind}.");
+            }
+
             if (node is BinaryExpressionSyntax b)
             {
                 int left = EvaluateExpression(b.Left);
