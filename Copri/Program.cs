@@ -1,6 +1,8 @@
 ﻿using Copri.CodeAnalysis;
+using Copri.CodeAnalysis.Binding;
 using Copri.CodeAnalysis.Syntax;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Copri
@@ -32,7 +34,10 @@ namespace Copri
 
 
                 SyntaxTree syntaxTree = SyntaxTree.Parse(input);
-
+                Binder binder = new Binder();
+                BoundExpression boundExpression = binder.BindExpression(syntaxTree.Root);
+                IReadOnlyList<string> diagnostics = syntaxTree.Diagnostics.Concat(binder.Diagnostics).ToList();
+                
                 if (showTree)
                 {
                     Console.ForegroundColor = ConsoleColor.DarkGray;
@@ -40,9 +45,9 @@ namespace Copri
                     Console.ResetColor();
                 }
 
-                if (!syntaxTree.Diagnostics.Any())
+                if (!diagnostics.Any())
                 {
-                    Evaluator evaluator = new Evaluator(syntaxTree.Root);
+                    Evaluator evaluator = new Evaluator(boundExpression);
                     int result = evaluator.Evaluate();
                     Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.WriteLine(result);
