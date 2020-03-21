@@ -57,14 +57,14 @@ namespace Copri.CodeAnalysis
             return NextToken();
         }
 
-        private ExpressionSyntax ParseExpression() => ParseTerm();
-
         public SyntaxTree Parse()
         {
-            ExpressionSyntax expression = ParseTerm();
+            ExpressionSyntax expression = ParseExpression();
             SyntaxToken endOfFileToken = MatchToken(SyntaxKind.EndOfFileToken);
             return new SyntaxTree(diagnostics, expression, endOfFileToken);
         }
+        
+        private ExpressionSyntax ParseExpression() => ParseTerm();
 
         public ExpressionSyntax ParseTerm()
         {
