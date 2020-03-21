@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Copri.CodeAnalysis
+namespace Copri.CodeAnalysis.Syntax
 {
     public sealed class SyntaxToken : SyntaxNode
     {

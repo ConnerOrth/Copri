@@ -1,4 +1,5 @@
 ﻿using Copri.CodeAnalysis;
+using Copri.CodeAnalysis.Syntax;
 using System;
 using System.Linq;
 

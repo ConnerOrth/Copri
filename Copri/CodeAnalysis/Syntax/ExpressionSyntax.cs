@@ -1,4 +1,4 @@
-﻿namespace Copri.CodeAnalysis
+﻿namespace Copri.CodeAnalysis.Syntax
 {
     public abstract class ExpressionSyntax : SyntaxNode
     {

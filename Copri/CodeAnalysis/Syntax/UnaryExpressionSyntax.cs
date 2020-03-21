@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Copri.CodeAnalysis
+namespace Copri.CodeAnalysis.Syntax
 {
     public sealed class UnaryExpressionSyntax : ExpressionSyntax
     {

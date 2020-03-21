@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Copri.CodeAnalysis
+namespace Copri.CodeAnalysis.Syntax
 {
     internal sealed class Parser
     {
