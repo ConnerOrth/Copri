@@ -2,7 +2,7 @@
 
 namespace Copri.CodeAnalysis
 {
-    sealed class LiteralExpressionSyntax : ExpressionSyntax
+    public sealed class LiteralExpressionSyntax : ExpressionSyntax
     {
         public override SyntaxKind Kind => SyntaxKind.LiteralExpression;
         public SyntaxToken LiteralToken { get; }

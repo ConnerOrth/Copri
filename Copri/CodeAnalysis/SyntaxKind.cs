@@ -1,6 +1,6 @@
 ﻿namespace Copri.CodeAnalysis
 {
-    enum SyntaxKind
+    public enum SyntaxKind
     {
         NumberToken,
         WhiteSpaceToken,

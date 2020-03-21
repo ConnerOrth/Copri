@@ -2,7 +2,7 @@
 
 namespace Copri.CodeAnalysis
 {
-    class Evaluator
+    public class Evaluator
     {
         private readonly ExpressionSyntax root;
 

@@ -6,7 +6,7 @@ namespace Copri
 {
     internal static class Program
     {
-        static void Main()
+        private static void Main()
         {
             bool showTree = false;
             while (true)

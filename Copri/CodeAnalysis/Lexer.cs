@@ -2,7 +2,7 @@
 
 namespace Copri.CodeAnalysis
 {
-    class Lexer
+    internal class Lexer
     {
         private readonly string text;
         private int position;

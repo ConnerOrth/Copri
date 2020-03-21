@@ -2,7 +2,7 @@
 
 namespace Copri.CodeAnalysis
 {
-    class Parser
+    internal sealed class Parser
     {
         private readonly IList<SyntaxToken> tokens = new List<SyntaxToken>();
         private readonly List<string> diagnostics = new List<string>();
