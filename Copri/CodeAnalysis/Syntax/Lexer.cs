@@ -14,16 +14,18 @@ namespace Copri.CodeAnalysis.Syntax
         }
 
         public IEnumerable<string> Diagnostics => diagnostics;
-        private char Current
+
+        private char Current => Peek(0);
+        private char Lookahead => Peek(1);
+
+        private char Peek(int offset)
         {
-            get
+            int index = position + offset;
+            if (index >= text.Length)
             {
-                if (position >= text.Length)
-                {
-                    return '\0';
-                }
-                return text[position];
+                return '\0';
             }
+            return text[index];
         }
 
         private void Next() => position++;
@@ -84,6 +86,9 @@ namespace Copri.CodeAnalysis.Syntax
                 case '/': return new SyntaxToken(SyntaxKind.SlashToken, position++, "/", null);
                 case '(': return new SyntaxToken(SyntaxKind.OpenParenthesisToken, position++, "(", null);
                 case ')': return new SyntaxToken(SyntaxKind.CloseParenthesisToken, position++, ")", null);
+                case '!': return new SyntaxToken(SyntaxKind.BangToken, position++, "!", null);
+                case '&' when Lookahead == '&': return new SyntaxToken(SyntaxKind.AmpersandAmpersandToken, position += 2, "&&", null);
+                case '|' when Lookahead == '|': return new SyntaxToken(SyntaxKind.PipePipeToken, position += 2, "||", null);
             }
             diagnostics.Add($"ERROR: bad character in input: '{Current}'.");
             return new SyntaxToken(SyntaxKind.BadToken, position++, text.Substring(position - 1, 1), null);
