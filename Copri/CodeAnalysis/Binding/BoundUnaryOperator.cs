@@ -18,12 +18,12 @@ namespace Copri.CodeAnalysis.Binding
         public SyntaxKind SyntaxKind { get; }
         public BoundUnaryOperatorKind Kind { get; }
         public Type OperandType { get; }
-        public Type ReturnType { get; }
+        public Type Type { get; }
 
         private BoundUnaryOperator(SyntaxKind syntaxKind, BoundUnaryOperatorKind kind, Type operandType) : this(syntaxKind, kind, operandType, operandType)
         { }
         private BoundUnaryOperator(SyntaxKind syntaxKind, BoundUnaryOperatorKind kind, Type operandType, Type returnType)
-            => (SyntaxKind, Kind, OperandType, ReturnType) = (syntaxKind, kind, operandType, returnType);
+            => (SyntaxKind, Kind, OperandType, Type) = (syntaxKind, kind, operandType, returnType);
 
         public static BoundUnaryOperator Bind(SyntaxKind syntaxKind, Type operandType)
             => operators.FirstOrDefault(o => o.SyntaxKind == syntaxKind && o.OperandType == operandType);

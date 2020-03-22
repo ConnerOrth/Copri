@@ -4,7 +4,7 @@ namespace Copri.CodeAnalysis.Binding
 {
     internal sealed class BoundBinaryExpression : BoundExpression
     {
-        public override Type Type => Left.Type;
+        public override Type Type => Operator.Type;
         public override BoundNodeKind Kind => BoundNodeKind.BinaryExpression;
         public BoundExpression Left { get; }
         public BoundBinaryOperator Operator { get; }

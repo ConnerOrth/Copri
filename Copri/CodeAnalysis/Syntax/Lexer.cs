@@ -86,9 +86,11 @@ namespace Copri.CodeAnalysis.Syntax
                 case '/': return new SyntaxToken(SyntaxKind.SlashToken, position++, "/", null);
                 case '(': return new SyntaxToken(SyntaxKind.OpenParenthesisToken, position++, "(", null);
                 case ')': return new SyntaxToken(SyntaxKind.CloseParenthesisToken, position++, ")", null);
+                case '!' when Lookahead == '=': return new SyntaxToken(SyntaxKind.BangEqualsToken, position += 2, "!=", null);
                 case '!': return new SyntaxToken(SyntaxKind.BangToken, position++, "!", null);
                 case '&' when Lookahead == '&': return new SyntaxToken(SyntaxKind.AmpersandAmpersandToken, position += 2, "&&", null);
                 case '|' when Lookahead == '|': return new SyntaxToken(SyntaxKind.PipePipeToken, position += 2, "||", null);
+                case '=' when Lookahead == '=': return new SyntaxToken(SyntaxKind.EqualsEqualsToken, position += 2, "==", null);
             }
             diagnostics.Add($"ERROR: bad character in input: '{Current}'.");
             return new SyntaxToken(SyntaxKind.BadToken, position++, text.Substring(position - 1, 1), null);
