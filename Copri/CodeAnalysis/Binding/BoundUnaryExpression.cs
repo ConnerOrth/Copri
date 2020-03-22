@@ -6,11 +6,11 @@ namespace Copri.CodeAnalysis.Binding
     {
         public override Type Type => Operand.Type;
         public override BoundNodeKind Kind => BoundNodeKind.UnaryExpression;
-        public BoundUnaryOperatorKind OperatorKind { get; }
+        public BoundUnaryOperator Operator { get; }
         public BoundExpression Operand { get; }
 
 
-        public BoundUnaryExpression(BoundUnaryOperatorKind operatorKind, BoundExpression operand)
-            => (OperatorKind, Operand) = (operatorKind, operand);
+        public BoundUnaryExpression(BoundUnaryOperator @operator, BoundExpression operand)
+            => (Operator, Operand) = (@operator, operand);
     }
 }
