@@ -66,7 +66,7 @@ namespace Copri.CodeAnalysis.Syntax
         
         private ExpressionSyntax ParseExpression(int parentPrecedence = 0)
         {
-            ExpressionSyntax left ;
+            ExpressionSyntax left;
             int unaryOperatorPrecedence = Current.Kind.GetUnaryOperatorPrecedence();
 
             if (unaryOperatorPrecedence != 0 && unaryOperatorPrecedence >= parentPrecedence)
@@ -95,15 +95,29 @@ namespace Copri.CodeAnalysis.Syntax
         
         private ExpressionSyntax ParsePrimaryExpression()
         {
-            if (Current.Kind == SyntaxKind.OpenParenthesisToken)
+            switch (Current.Kind)
             {
-                SyntaxToken left = NextToken();
-                ExpressionSyntax expression = ParseExpression();
-                SyntaxToken right = MatchToken(SyntaxKind.CloseParenthesisToken);
-                return new ParenthesizedExpressionSyntax(left, expression, right);
+                case SyntaxKind.OpenParenthesisToken:
+                    {
+                        SyntaxToken left = NextToken();
+                        ExpressionSyntax expression = ParseExpression();
+                        SyntaxToken right = MatchToken(SyntaxKind.CloseParenthesisToken);
+                        return new ParenthesizedExpressionSyntax(left, expression, right);
+                    }
+
+                case SyntaxKind.TrueKeyword:
+                case SyntaxKind.FalseKeyword:
+                    {
+                        SyntaxToken keywordToken = NextToken();
+                        bool value = keywordToken.Kind == SyntaxKind.TrueKeyword;
+                        return new LiteralExpressionSyntax(keywordToken, value);
+                    }
+                default:
+                    {
+                        SyntaxToken numberToken = MatchToken(SyntaxKind.NumberToken);
+                        return new LiteralExpressionSyntax(numberToken);
+                    }
             }
-            SyntaxToken numberToken = MatchToken(SyntaxKind.NumberToken);
-            return new LiteralExpressionSyntax(numberToken);
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace Copri.CodeAnalysis.Syntax
+﻿using System;
+
+namespace Copri.CodeAnalysis.Syntax
 {
     internal static class SyntaxFacts
     {
@@ -27,6 +29,19 @@
                 default:
                     return 0;
             }
+        }
+
+        public static SyntaxKind GetKeywordKind(string tokenText) 
+        {
+            if (tokenText == "true")
+            {
+                return SyntaxKind.TrueKeyword;
+            }
+            else if (tokenText == "false")
+            {
+                return SyntaxKind.FalseKeyword;
+            }
+            return SyntaxKind.IdentifierToken;
         }
     }
 }

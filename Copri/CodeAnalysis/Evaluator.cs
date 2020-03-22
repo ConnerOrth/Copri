@@ -1,5 +1,4 @@
 ﻿using Copri.CodeAnalysis.Binding;
-using Copri.CodeAnalysis.Syntax;
 using System;
 
 namespace Copri.CodeAnalysis
@@ -13,21 +12,21 @@ namespace Copri.CodeAnalysis
             this.root = root;
         }
 
-        public int Evaluate()
+        public object Evaluate()
         {
             return EvaluateExpression(root);
         }
 
-        private int EvaluateExpression(BoundExpression node)
+        private object EvaluateExpression(BoundExpression node)
         {
             if (node is BoundLiteralExpression l)
             {
-                return (int)l.Value;
+                return l.Value;
             }
 
             if (node is BoundUnaryExpression u)
             {
-                int operand = EvaluateExpression(u.Operand);
+                int operand = (int)EvaluateExpression(u.Operand);
                 return u.OperatorKind switch
                 {
                     BoundUnaryOperatorKind.Identity => operand,
@@ -38,8 +37,8 @@ namespace Copri.CodeAnalysis
 
             if (node is BoundBinaryExpression b)
             {
-                int left = EvaluateExpression(b.Left);
-                int right = EvaluateExpression(b.Right);
+                int left = (int)EvaluateExpression(b.Left);
+                int right = (int)EvaluateExpression(b.Right);
 
                 return b.OperatorKind switch
                 {
@@ -50,7 +49,7 @@ namespace Copri.CodeAnalysis
                     _ => throw new Exception($"Unexpected binary operator {b.OperatorKind}."),
                 };
             }
-            
+
             throw new Exception($"Unexpected node {node.Kind}.");
         }
     }

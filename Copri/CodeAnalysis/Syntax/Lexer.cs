@@ -62,6 +62,20 @@ namespace Copri.CodeAnalysis.Syntax
                 return new SyntaxToken(SyntaxKind.WhiteSpaceToken, start, tokenText, null);
             }
 
+            if (char.IsLetter(Current))
+            {
+                int start = position;
+
+                while (char.IsLetter(Current))
+                {
+                    Next();
+                }
+                int length = position - start;
+                string tokenText = text.Substring(start, length);
+                SyntaxKind kind = SyntaxFacts.GetKeywordKind(tokenText);
+                return new SyntaxToken(kind, start, tokenText, null);
+            }
+
             switch (Current)
             {
                 case '+': return new SyntaxToken(SyntaxKind.PlusToken, position++, "+", null);

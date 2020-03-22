@@ -32,7 +32,6 @@ namespace Copri
                     continue;
                 }
 
-
                 SyntaxTree syntaxTree = SyntaxTree.Parse(input);
                 Binder binder = new Binder();
                 BoundExpression boundExpression = binder.BindExpression(syntaxTree.Root);
@@ -48,7 +47,7 @@ namespace Copri
                 if (!diagnostics.Any())
                 {
                     Evaluator evaluator = new Evaluator(boundExpression);
-                    int result = evaluator.Evaluate();
+                    object result = evaluator.Evaluate();
                     Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.WriteLine(result);
                     Console.ResetColor();

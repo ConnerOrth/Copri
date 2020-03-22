@@ -6,8 +6,11 @@ namespace Copri.CodeAnalysis.Syntax
     {
         public override SyntaxKind Kind => SyntaxKind.LiteralExpression;
         public SyntaxToken LiteralToken { get; }
+        public object Value { get; }
 
-        public LiteralExpressionSyntax(SyntaxToken literalToken) => LiteralToken = literalToken;
+        public LiteralExpressionSyntax(SyntaxToken literalToken) : this(literalToken, literalToken.Value){ }
+        public LiteralExpressionSyntax(SyntaxToken literalToken, object value) 
+            => (LiteralToken, Value) = (literalToken,value);
 
         public override IEnumerable<SyntaxNode> GetChildren()
         {
