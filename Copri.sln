@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29911.84
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Copri", "Copri\Copri.csproj", "{7587B80A-6E60-4FFE-A382-C18048E5885A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CopriCompiler", "CopriCompiler\CopriCompiler.csproj", "{7587B80A-6E60-4FFE-A382-C18048E5885A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{49013B90-7686-4F9C-998B-2371B5895410}"
 	ProjectSection(SolutionItems) = preProject
