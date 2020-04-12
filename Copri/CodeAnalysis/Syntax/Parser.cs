@@ -5,7 +5,7 @@ namespace Copri.CodeAnalysis.Syntax
     internal sealed class Parser
     {
         private readonly IList<SyntaxToken> tokens = new List<SyntaxToken>();
-        private readonly List<string> diagnostics = new List<string>();
+        private readonly DiagnosticBag diagnostics = new DiagnosticBag();
         private int position;
 
         public Parser(string text)
@@ -25,7 +25,7 @@ namespace Copri.CodeAnalysis.Syntax
             diagnostics.AddRange(lexer.Diagnostics);
         }
 
-        public IEnumerable<string> Diagnostics => diagnostics;
+        public DiagnosticBag Diagnostics => diagnostics;
 
         private SyntaxToken Peek(int offset)
         {
@@ -51,7 +51,7 @@ namespace Copri.CodeAnalysis.Syntax
         {
             if (Current.Kind != kind)
             {
-                diagnostics.Add($"ERROR: unexpected token <{Current.Kind}>, expected <{kind}>.");
+                diagnostics.ReportUnexpectedToken(Current.TextSpan, Current.Kind, kind);
                 return new SyntaxToken(kind, position, null, null);
             }
             return NextToken();

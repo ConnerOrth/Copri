@@ -6,8 +6,8 @@ namespace Copri.CodeAnalysis.Binding
 {
     internal sealed class Binder
     {
-        private readonly List<string> diagnostics = new List<string>();
-        public IEnumerable<string> Diagnostics => diagnostics;
+        private readonly DiagnosticBag diagnostics = new DiagnosticBag();
+        public DiagnosticBag Diagnostics => diagnostics;
 
         public BoundExpression BindExpression(ExpressionSyntax syntax)
         {
@@ -38,7 +38,7 @@ namespace Copri.CodeAnalysis.Binding
             BoundUnaryOperator? boundOperator = BoundUnaryOperator.Bind(syntax.OperatorToken.Kind, boundOperand.Type);
             if (boundOperator is null)
             {
-                diagnostics.Add($"Unary operator '{syntax.OperatorToken.Text}' is not defined for type {boundOperand.Type}");
+                diagnostics.ReportUndefinedUnaryOperator(syntax.OperatorToken.TextSpan, syntax.OperatorToken.Text, boundOperand.Type);
                 return boundOperand;
             }
             return new BoundUnaryExpression(boundOperator, boundOperand);
@@ -51,7 +51,7 @@ namespace Copri.CodeAnalysis.Binding
             BoundBinaryOperator? boundOperator = BoundBinaryOperator.Bind(syntax.OperatorToken.Kind, boundLeft.Type, boundRight.Type);
             if (boundOperator is null)
             {
-                diagnostics.Add($"Binary operator '{syntax.OperatorToken.Text}' is not defined for types {boundLeft.Type} and {boundRight.Type}.");
+                diagnostics.ReportUndefinedBinaryOperator(syntax.OperatorToken.TextSpan, syntax.OperatorToken.Text, boundLeft.Type, boundRight.Type);
                 return boundLeft;
             }
             return new BoundBinaryExpression(boundLeft, boundOperator, boundRight);

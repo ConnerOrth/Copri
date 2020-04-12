@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Copri
+namespace CopriCompiler
 {
     internal static class Program
     {
@@ -33,9 +33,10 @@ namespace Copri
                 }
 
                 SyntaxTree syntaxTree = SyntaxTree.Parse(input);
-                Binder binder = new Binder();
-                BoundExpression boundExpression = binder.BindExpression(syntaxTree.Root);
-                IReadOnlyList<string> diagnostics = syntaxTree.Diagnostics.Concat(binder.Diagnostics).ToList();
+                Compilation compilation = new Compilation(syntaxTree);
+                EvaluationResult result = compilation.Evaluate();
+
+                IReadOnlyList<Diagnostic> diagnostics = result.Diagnostics;
                 
                 if (showTree)
                 {
@@ -46,22 +47,35 @@ namespace Copri
 
                 if (!diagnostics.Any())
                 {
-                    Evaluator evaluator = new Evaluator(boundExpression);
-                    object result = evaluator.Evaluate();
                     Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.WriteLine(result);
+                    Console.WriteLine(result.Value);
                     Console.ResetColor();
                 }
                 else
                 {
-                    Console.ForegroundColor = ConsoleColor.DarkRed;
-
-                    foreach (string diagnostic in syntaxTree.Diagnostics)
+                    foreach (Diagnostic diagnostic in diagnostics)
                     {
-                        Console.WriteLine(diagnostic);
-                    }
+                        Console.WriteLine();
 
-                    Console.ResetColor();
+                        Console.ForegroundColor = ConsoleColor.DarkRed;
+                        Console.WriteLine(diagnostic);
+                        Console.ResetColor();
+
+                        string prefix = input.Substring(0, diagnostic.TextSpan.Start);
+                        string error = input.Substring(diagnostic.TextSpan.Start, diagnostic.TextSpan.Length);
+                        string suffix = input.Substring(diagnostic.TextSpan.End);
+
+                        Console.Write("   ");
+                        Console.Write(prefix);
+                        
+                        Console.ForegroundColor = ConsoleColor.DarkRed;
+                        Console.Write(error);
+                        Console.ResetColor();
+
+                        Console.Write(suffix);
+                        Console.WriteLine();
+                    }
+                    Console.WriteLine();
                 }
             }
         }
