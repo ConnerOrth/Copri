@@ -2,18 +2,18 @@
 
 namespace Copri.CodeAnalysis.Syntax
 {
-    internal class Lexer
+    internal sealed class Lexer
     {
         private readonly string text;
         private int position;
-        private readonly IList<string> diagnostics = new List<string>();
+        private readonly DiagnosticBag diagnostics = new DiagnosticBag();
 
         public Lexer(string text)
         {
             this.text = text;
         }
 
-        public IEnumerable<string> Diagnostics => diagnostics;
+        public DiagnosticBag Diagnostics => diagnostics;
 
         private char Current => Peek(0);
         private char Lookahead => Peek(1);
@@ -34,10 +34,9 @@ namespace Copri.CodeAnalysis.Syntax
         {
             if (position >= text.Length) return new SyntaxToken(SyntaxKind.EndOfFileToken, position, "\0", null);
 
+            int start = position;
             if (char.IsDigit(Current))
             {
-                int start = position;
-
                 while (char.IsDigit(Current))
                 {
                     Next();
@@ -46,15 +45,13 @@ namespace Copri.CodeAnalysis.Syntax
                 string tokenText = text.Substring(start, length);
                 if (!int.TryParse(tokenText, out int value))
                 {
-                    diagnostics.Add($"The number '{text}' is not a valid int.");
+                    diagnostics.ReportInvalidNumber(new TextSpan(start, length), text, typeof(int));
                 }
                 return new SyntaxToken(SyntaxKind.NumberToken, start, tokenText, value);
             }
 
             if (char.IsWhiteSpace(Current))
             {
-                int start = position;
-
                 while (char.IsWhiteSpace(Current))
                 {
                     Next();
@@ -66,8 +63,6 @@ namespace Copri.CodeAnalysis.Syntax
 
             if (char.IsLetter(Current))
             {
-                int start = position;
-
                 while (char.IsLetter(Current))
                 {
                     Next();
@@ -86,13 +81,33 @@ namespace Copri.CodeAnalysis.Syntax
                 case '/': return new SyntaxToken(SyntaxKind.SlashToken, position++, "/", null);
                 case '(': return new SyntaxToken(SyntaxKind.OpenParenthesisToken, position++, "(", null);
                 case ')': return new SyntaxToken(SyntaxKind.CloseParenthesisToken, position++, ")", null);
-                case '!' when Lookahead == '=': return new SyntaxToken(SyntaxKind.BangEqualsToken, position += 2, "!=", null);
+                case '!' when Lookahead == '=':
+                    {
+                        position += 2;
+                        return new SyntaxToken(SyntaxKind.BangEqualsToken, start, "!=", null);
+                    }
                 case '!': return new SyntaxToken(SyntaxKind.BangToken, position++, "!", null);
-                case '&' when Lookahead == '&': return new SyntaxToken(SyntaxKind.AmpersandAmpersandToken, position += 2, "&&", null);
-                case '|' when Lookahead == '|': return new SyntaxToken(SyntaxKind.PipePipeToken, position += 2, "||", null);
-                case '=' when Lookahead == '=': return new SyntaxToken(SyntaxKind.EqualsEqualsToken, position += 2, "==", null);
+                case '&' when Lookahead == '&':
+                    {
+                        position += 2;
+                        return new SyntaxToken(SyntaxKind.AmpersandAmpersandToken, start, "&&", null);
+                    }
+                case '|' when Lookahead == '|':
+                    {
+                        position += 2;
+                        return new SyntaxToken(SyntaxKind.PipePipeToken, start, "||", null);
+                    }
+                case '=' when Lookahead == '=':
+                    {
+                        position += 2;
+                        return new SyntaxToken(SyntaxKind.EqualsEqualsToken, start, "==", null);
+                    }
+                case '=':
+                    {
+                        return new SyntaxToken(SyntaxKind.EqualsToken, position++, "=", null);
+                    }
             }
-            diagnostics.Add($"ERROR: bad character in input: '{Current}'.");
+            diagnostics.ReportBadCharacter(position, Current);
             return new SyntaxToken(SyntaxKind.BadToken, position++, text.Substring(position - 1, 1), null);
         }
     }
