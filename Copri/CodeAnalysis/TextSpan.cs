@@ -9,5 +9,4 @@
         public TextSpan(int start, int length)
             => (Start, Length) = (start, length);
     }
-
 }

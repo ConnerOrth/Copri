@@ -12,6 +12,8 @@ namespace CopriCompiler
         private static void Main()
         {
             bool showTree = false;
+            Dictionary<VariableSymbol, object> variables = new Dictionary<VariableSymbol, object>();
+
             while (true)
             {
                 Console.Write("> ");
@@ -34,10 +36,10 @@ namespace CopriCompiler
 
                 SyntaxTree syntaxTree = SyntaxTree.Parse(input);
                 Compilation compilation = new Compilation(syntaxTree);
-                EvaluationResult result = compilation.Evaluate();
+                EvaluationResult result = compilation.Evaluate(variables);
 
                 IReadOnlyList<Diagnostic> diagnostics = result.Diagnostics;
-                
+
                 if (showTree)
                 {
                     Console.ForegroundColor = ConsoleColor.DarkGray;
@@ -67,7 +69,7 @@ namespace CopriCompiler
 
                         Console.Write("   ");
                         Console.Write(prefix);
-                        
+
                         Console.ForegroundColor = ConsoleColor.DarkRed;
                         Console.Write(error);
                         Console.ResetColor();

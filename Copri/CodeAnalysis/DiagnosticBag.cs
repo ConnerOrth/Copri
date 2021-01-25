@@ -49,5 +49,11 @@ namespace Copri.CodeAnalysis
             string message = $"Binary operator '{operatorText}' is not defined for types {leftOperandType} and {rightOperandType}.";
             Report(textSpan, message);
         }
+
+        public void ReportUndefinedName(TextSpan textSpan, string name)
+        {
+            string message = $"Variable '{name}' does not exist.";
+            Report(textSpan, message);
+        }
     }
 }

@@ -1,15 +1,18 @@
 ﻿using Copri.CodeAnalysis.Binding;
 using System;
+using System.Collections.Generic;
 
 namespace Copri.CodeAnalysis
 {
     internal sealed class Evaluator
     {
         private readonly BoundExpression root;
+        private readonly Dictionary<VariableSymbol, object> variables;
 
-        public Evaluator(BoundExpression root)
+        public Evaluator(BoundExpression root, Dictionary<VariableSymbol, object> variables)
         {
             this.root = root;
+            this.variables = variables;
         }
 
         public object Evaluate()
@@ -22,6 +25,18 @@ namespace Copri.CodeAnalysis
             if (node is BoundLiteralExpression l)
             {
                 return l.Value;
+            }
+
+            if (node is BoundVariableExpression v)
+            {
+                return variables[v.Variable];
+            }
+
+            if (node is BoundAssignmentExpression a)
+            {
+                var value = EvaluateExpression(a.Expression);
+                variables[a.Variable] = value;
+                return value;
             }
 
             if (node is BoundUnaryExpression u)

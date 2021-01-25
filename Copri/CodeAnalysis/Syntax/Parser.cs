@@ -72,7 +72,7 @@ namespace Copri.CodeAnalysis.Syntax
         private ExpressionSyntax ParseAssignmenExpression()
         {
             if (Peek(0).Kind == SyntaxKind.IdentifierToken
-                && Peek(0).Kind == SyntaxKind.EqualsToken)
+                && Peek(1).Kind == SyntaxKind.EqualsToken)
             {
                 SyntaxToken identifierToken = NextToken();
                 SyntaxToken operatorToken = NextToken();
