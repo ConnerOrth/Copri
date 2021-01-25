@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Copri.CodeAnalysis
 {
-    public class Compilation
+    public sealed class Compilation
     {
         public SyntaxTree Syntax { get; }
 
@@ -20,7 +20,7 @@ namespace Copri.CodeAnalysis
             Binder binder = new Binder();
             BoundExpression boundExpression = binder.BindExpression(Syntax.Root);
 
-            IList<Diagnostic> diagnostics = Syntax.Diagnostics.Concat(binder.Diagnostics).ToList();
+            Diagnostic[] diagnostics = Syntax.Diagnostics.Concat(binder.Diagnostics).ToArray();
 
             if (diagnostics.Any()) return new EvaluationResult(diagnostics, null);
 

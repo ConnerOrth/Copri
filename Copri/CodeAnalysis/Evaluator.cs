@@ -3,7 +3,7 @@ using System;
 
 namespace Copri.CodeAnalysis
 {
-    internal class Evaluator
+    internal sealed class Evaluator
     {
         private readonly BoundExpression root;
 

@@ -2,7 +2,7 @@
 
 namespace Copri.CodeAnalysis.Syntax
 {
-    internal class Lexer
+    internal sealed class Lexer
     {
         private readonly string text;
         private int position;
@@ -101,6 +101,10 @@ namespace Copri.CodeAnalysis.Syntax
                     {
                         position += 2;
                         return new SyntaxToken(SyntaxKind.EqualsEqualsToken, start, "==", null);
+                    }
+                case '=':
+                    {
+                        return new SyntaxToken(SyntaxKind.EqualsToken, position++, "=", null);
                     }
             }
             diagnostics.ReportBadCharacter(position, Current);

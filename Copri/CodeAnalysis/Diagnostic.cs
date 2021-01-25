@@ -1,6 +1,6 @@
 ﻿namespace Copri.CodeAnalysis
 {
-    public sealed partial class Diagnostic
+    public sealed class Diagnostic
     {
         public TextSpan TextSpan { get; }
         public string Message { get; }
